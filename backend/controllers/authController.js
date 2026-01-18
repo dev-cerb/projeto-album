@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import prisma from '../database/prismaClient.js'
+import jwt from 'jsonwebtoken'
 
 export async function register(req, res) {
   try {
@@ -31,13 +32,44 @@ export async function register(req, res) {
     })
 
     return res.status(201).json({
-      message: 'Conta criada com sucesso'
+      message: 'Conta criada com sucesso.'
     })
 
   } catch (error) {
     console.error(error)
     return res.status(500).json({
-      message: 'Erro interno do servidor'
+      message: 'Erro interno do servidor.'
     })
   }
+}
+
+export async function login (req, res){
+    try{
+        const { email, password } = req.body;
+    
+        if (!email || !password) {
+          return res.status(400).json({ message: 'Todos os campos devem ser preenchidos.'})  
+        } 
+    
+        const user = await prisma.user.findUnique({
+            where: { email }
+        })
+    
+        if (!user) {
+            return res.status(401).json({ message: 'Credenciais inválidas.'})
+        }
+    
+        const validPassword = await bcrypt.compare(password, user.password)
+    
+        if (!validPassword){
+            return res.status(401).json({ message: 'Credenciais inválidas.'})
+        }
+
+        const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET, {expiresIn: '1d'})
+
+        return res.status(200).json({token})
+    }catch(error){
+        console.error(error)
+        return res.status(500).json({message: 'Erro interno do servidor.'})
+    }
 }
