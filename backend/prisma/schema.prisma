@@ -19,4 +19,37 @@ model User {
   password String
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
+
+  albums Album[]
+}
+
+model Album {
+  id Int @id @default(autoincrement())
+  titulo String
+  descricao String
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  fotos Foto[]
+
+}
+
+model Foto {
+  id Int @id @default(autoincrement())
+  titulo String
+  descricao String
+  dataAquisicao DateTime
+  tamanho BigInt
+  cor String
+
+  arquivo String
+  mimeType String
+
+  albumId Int
+  album Album @relation(fields: [albumId], references: [id])
+
+  createdAt DateTime @default(now())
 }
