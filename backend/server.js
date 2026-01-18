@@ -1,13 +1,13 @@
 import express from "express";
+import routes from './routes/index.js';
 
 const app = express()
+
 app.use(express.json());
 
-const port = 8080;
+app.use('/api/v1', routes)
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-})
+const port = 8080;
 
 app.listen(port, () => {
     console.log('Servidor rodando.')
