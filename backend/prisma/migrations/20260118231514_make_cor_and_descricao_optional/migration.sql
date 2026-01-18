@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Foto" ALTER COLUMN "descricao" DROP NOT NULL,
+ALTER COLUMN "cor" DROP NOT NULL;
