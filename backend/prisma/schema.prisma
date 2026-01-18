@@ -40,10 +40,10 @@ model Album {
 model Foto {
   id Int @id @default(autoincrement())
   titulo String
-  descricao String
+  descricao String?
   dataAquisicao DateTime
-  tamanho BigInt
-  cor String
+  tamanho Int
+  cor String?
 
   arquivo String
   mimeType String
