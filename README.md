@@ -88,27 +88,28 @@ docker compose up --build
 
 ### Autenticação
 
-POST /api/v1/auth/register
-POST /api/v1/auth/login
+- POST /api/v1/auth/register
+- POST /api/v1/auth/login
 
 ### Álbuns
 
-GET /api/v1/albuns?page=1&limit=12
-GET /api/v1/albuns/:id
-POST /api/v1/albuns
-PUT /api/v1/albuns/:id
-DELETE /api/v1/albuns/:id
+- GET /api/v1/albuns?page=1&limit=12
+- GET /api/v1/albuns/:id
+- POST /api/v1/albuns
+- PUT /api/v1/albuns/:id
+- DELETE /api/v1/albuns/:id
 
 ### Fotos
 
-GET /api/v1/albuns/:albumId/fotos?page=1&limit=12
-POST /api/v1/albuns/:albumId/fotos
-PUT /api/v1/albuns/:albumId/fotos/:fotoId
-DELETE /api/v1/albuns/:albumId/fotos/:fotoId
+- GET /api/v1/albuns/:albumId/fotos?page=1&limit=12
+- POST /api/v1/albuns/:albumId/fotos
+- PUT /api/v1/albuns/:albumId/fotos/:fotoId
+- DELETE /api/v1/albuns/:albumId/fotos/:fotoId
 
 ---
 
 ## Autor
 
 Projeto desenvolvido por Carlos Barreto
+
 Desenvolvedor Fullstack.
