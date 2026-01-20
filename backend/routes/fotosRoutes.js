@@ -17,7 +17,7 @@ router.post(
   upload.array("files", 10),
   uploadFotos,
 );
-router.delete("/fotos/:id", AuthMiddleware, deleteFoto);
+router.delete("/:albumId/fotos/:fotoId", AuthMiddleware, deleteFoto);
 router.put("/:albumId/fotos/:fotoId", AuthMiddleware, updateFoto);
 
 export default router;

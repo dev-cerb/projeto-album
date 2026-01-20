@@ -106,13 +106,14 @@ export async function uploadFotos(req, res) {
 
 export async function deleteFoto(req, res) {
   try {
-    const { id } = req.params;
+    const { albumId, fotoId } = req.params;
     const userId = req.userId;
 
     const foto = await prisma.foto.findFirst({
       where: {
-        id: Number(id),
+        id: Number(fotoId),
         album: {
+          id: Number(albumId),
           userId: req.userId,
         },
       },
