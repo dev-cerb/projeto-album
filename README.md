@@ -70,15 +70,15 @@ Aplicação web fullstack para gerenciamento de álbuns de fotos, permitindo cad
 
 Crie um arquivo .env dentro da pasta backend e insira no mesmo modelo:
 
-DATABASE_URL=postgresql://postgres:postgres@db:5432/db
-JWT_SECRET=sua_chave_secreta_aqui
+- DATABASE_URL=postgresql://postgres:postgres@db:5432/db
+- JWT_SECRET=sua_chave_secreta_aqui
 
 #### Frontend (`frontend/.env`)
 
 Crie um arquivo .env dentro da pasta frontend e insira no mesmo modelo:
 
-VITE_API_URL=http://localhost:8080/api/v1
-VITE_UPLOADS_URL=http://localhost:8080/uploads
+- VITE_API_URL=http://localhost:8080/api/v1
+- VITE_UPLOADS_URL=http://localhost:8080/uploads
 
 ### Executando com Docker
 
