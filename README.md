@@ -57,36 +57,6 @@ Aplicação web fullstack para gerenciamento de álbuns de fotos, permitindo cad
 
 ---
 
-## Estrutura do Projeto
-
-├── backend/
-│ ├── config/
-│ ├── controllers/
-│ ├── database/
-│ ├── middlewares/
-│ ├── prisma/
-│ │ ├── migrations/
-│ │ └── schema.prisma
-│ ├── routes/
-│ ├── uploads/
-│ ├── .env.example
-│ ├── Dockerfile
-│ └── server.js
-│
-│
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ ├── services/
-│ │ └── main.jsx
-│ ├── .env.example
-│ └── Dockerfile
-│
-└── docker-compose.yml
-
----
-
 ## Rodando em Ambiente Local
 
 ### Pré-requisitos
