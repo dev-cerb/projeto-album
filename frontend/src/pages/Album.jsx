@@ -24,10 +24,23 @@ export default function Album() {
   const [fotoEditing, setFotoEditing] = useState(null)
   const [uploadModalOpen, setUploadModalOpen] = useState(false)
   const [fotoDeleting, setFotoDeleting] = useState(null)
+  const [viewMode, setViewMode] = useState('grid')
 
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Number(searchParams.get('page')) || 1
 
+  function formatFileSize(bytes) {
+    if (!bytes) return '-'
+
+    const kb = Number(bytes) / 1024
+    const mb = kb / 1024
+
+    if (mb >= 1) {
+      return `${mb.toFixed(2)} MB`
+    }
+
+    return `${kb.toFixed(2)} KB`
+  }
   async function fetchAlbum() {
     try {
       console.log(id)
@@ -112,27 +125,122 @@ export default function Album() {
       </header>
 
       <main className="p-6">
+        <div className="flex justify-end gap-2 mb-4">
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`px-3 py-1 rounded text-sm ${
+              viewMode === 'grid'
+                ? 'bg-emerald-500 text-white'
+                : 'bg-gray-200 text-gray-700 cursor-pointer'
+            }`}
+          >
+            Grade
+          </button>
+
+          <button
+            onClick={() => setViewMode('table')}
+            className={`px-3 py-1 rounded text-sm ${
+              viewMode === 'table'
+                ? 'bg-emerald-500 text-white'
+                : 'bg-gray-200 text-gray-700 cursor-pointer'
+            }`}
+          >
+            Tabela
+          </button>
+        </div>
+
         {loadingFotos ? (
           <p className="text-gray-400">Carregando fotos...</p>
         ) : fotos.length === 0 ? (
           <p className="text-gray-500">Este álbum ainda não possui fotos.</p>
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {fotos.map((foto) => (
-                <div
-                  key={foto.id}
-                  className="bg-gray-200 rounded overflow-hidden h-96 cursor-pointer"
-                  onClick={() => setFotoSelecionada(foto)}
-                >
-                  <img
-                    src={`${import.meta.env.VITE_UPLOADS_URL}/${foto.arquivo}`}
-                    alt={foto.titulo}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
+            {viewMode === 'grid' && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {fotos.map((foto) => (
+                  <div
+                    key={foto.id}
+                    className="bg-gray-200 rounded overflow-hidden h-96 cursor-pointer"
+                    onClick={() => setFotoSelecionada(foto)}
+                  >
+                    <img
+                      src={`${import.meta.env.VITE_UPLOADS_URL}/${foto.arquivo}`}
+                      alt={foto.titulo}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {viewMode === 'table' && (
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white rounded-lg shadow">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-sm">Foto</th>
+                      <th className="px-4 py-2 text-left text-sm">Título</th>
+                      <th className="px-4 py-2 text-left text-sm">Descrição</th>
+                      <th className="px-4 py-2 text-left text-sm">Tamanho</th>
+                      <th className="px-4 py-2 text-left text-sm">
+                        Cor Predominante
+                      </th>
+                      <th className="px-4 py-2 text-left text-sm">
+                        Data de Aquisição
+                      </th>
+                      <th className="px-4 py-2 text-left text-sm">Ações</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {fotos.map((foto) => (
+                      <tr key={foto.id} className="border-t hover:bg-gray-50">
+                        <td className="px-4 py-2">
+                          <img
+                            src={`${import.meta.env.VITE_UPLOADS_URL}/${foto.arquivo}`}
+                            alt={foto.titulo}
+                            className="w-16 h-16 object-cover rounded cursor-pointer"
+                            onClick={() => setFotoSelecionada(foto)}
+                          />
+                        </td>
+
+                        <td className="px-4 py-2 text-sm">{foto.titulo}</td>
+
+                        <td className="px-4 py-2 text-sm">
+                          {foto.descricao || '—'}
+                        </td>
+
+                        <td className="px-4 py-2 text-sm">
+                          {formatFileSize(foto.tamanho)}
+                        </td>
+
+                        <td className="px-4 py-2 text-sm">{foto.cor || '-'}</td>
+
+                        <td className="px-4 py-2 text-sm">
+                          {new Date(foto.dataAquisicao).toLocaleDateString()}
+                        </td>
+
+                        <td className="px-4 py-2 text-sm">
+                          <button
+                            onClick={() => setFotoEditing(foto)}
+                            className="text-emerald-600 hover:underline mr-3"
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            onClick={() => setFotoDeleting(foto)}
+                            className="text-red-500 hover:underline"
+                          >
+                            Excluir
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
             <div className="flex justify-center items-center gap-4 mt-8">
               <button
