@@ -85,7 +85,7 @@ export default function Register() {
             />
           </div>
 
-          <Button name="Registrar" type="submit" />
+          <Button name="Registrar" type="submit" full />
         </form>
       </div>
     </div>
