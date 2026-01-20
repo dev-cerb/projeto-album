@@ -5,6 +5,10 @@ import { useSearchParams } from 'react-router-dom'
 import apiRequest from '../services/api'
 import Button from '../components/Button'
 import DeleteAlbumModal from '../components/DeleteAlbumModal'
+import ViewFotoModal from '../components/ViewFotoModal'
+import EditFotoModal from '../components/EditFotoModal'
+import UploadFotosModal from '../components/UploadFotosModal'
+import DeleteFotoModal from '../components/DeleteFotoModal'
 
 export default function Album() {
   const { id } = useParams()
@@ -16,6 +20,10 @@ export default function Album() {
   const [totalPages, setTotalPages] = useState(1)
   const [loadingFotos, setLoadingFotos] = useState(true)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [fotoSelecionada, setFotoSelecionada] = useState(null)
+  const [fotoEditing, setFotoEditing] = useState(null)
+  const [uploadModalOpen, setUploadModalOpen] = useState(false)
+  const [fotoDeleting, setFotoDeleting] = useState(null)
 
   const [searchParams, setSearchParams] = useSearchParams()
   const page = Number(searchParams.get('page')) || 1
@@ -91,7 +99,11 @@ export default function Album() {
         </p>
 
         <div className="flex gap-3 mt-4">
-          <Button name="Upload fotos" />
+          <Button
+            name="Upload fotos"
+            onClick={() => setUploadModalOpen(true)}
+          />
+
           <Button
             name="Excluir álbum"
             onClick={() => setDeleteModalOpen(true)}
@@ -110,7 +122,8 @@ export default function Album() {
               {fotos.map((foto) => (
                 <div
                   key={foto.id}
-                  className="bg-gray-200 rounded overflow-hidden h-96"
+                  className="bg-gray-200 rounded overflow-hidden h-96 cursor-pointer"
+                  onClick={() => setFotoSelecionada(foto)}
                 >
                   <img
                     src={`${import.meta.env.VITE_UPLOADS_URL}/${foto.arquivo}`}
@@ -156,6 +169,46 @@ export default function Album() {
             setDeleteModalOpen(false)
             navigate(-1)
           }}
+        />
+      )}
+
+      {fotoSelecionada && (
+        <ViewFotoModal
+          foto={fotoSelecionada}
+          onClose={() => setFotoSelecionada(null)}
+          onEdit={(foto) => {
+            setFotoSelecionada(null)
+            setFotoEditing(foto)
+          }}
+          onDelete={(foto) => {
+            setFotoSelecionada(null)
+            setFotoDeleting(foto)
+          }}
+        />
+      )}
+
+      {fotoEditing && (
+        <EditFotoModal
+          foto={fotoEditing}
+          onClose={() => setFotoEditing(null)}
+          onUpdated={fetchFotos}
+        />
+      )}
+
+      {uploadModalOpen && (
+        <UploadFotosModal
+          albumId={album.id}
+          onClose={() => setUploadModalOpen(false)}
+          onUploaded={fetchFotos}
+        />
+      )}
+
+      {fotoDeleting && (
+        <DeleteFotoModal
+          albumId={album.id}
+          fotoId={fotoDeleting.id}
+          onClose={() => setFotoDeleting(null)}
+          onDeleted={fetchFotos}
         />
       )}
     </div>
