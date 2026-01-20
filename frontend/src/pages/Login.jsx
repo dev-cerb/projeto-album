@@ -71,7 +71,7 @@ export default function Login() {
             />
           </div>
 
-          <Button name="Entrar" type="submit" />
+          <Button name="Entrar" type="submit" full />
         </form>
 
         <p className="text-sm text-center text-gray-500 mt-6">
