@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+
 import apiRequest from '../services/api'
+
 import Button from '../components/Button'
 import CreateAlbumModal from '../components/CreateAlbumModal'
 import AlbumCard from '../components/AlbumCard'
@@ -12,8 +15,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [modalAlbumOpen, setModalAlbumOpen] = useState(false)
   const [albumEditing, setAlbumEditing] = useState(null)
-  const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const page = Number(searchParams.get('page')) || 1
 
   async function fetchAlbums() {
     try {
@@ -81,10 +86,10 @@ export default function Home() {
 
         <div className="flex justify-center items-center gap-4 mt-8">
           <button
-            onClick={() => setPage((p) => Math.max(p - 1, 1))}
+            onClick={() => setSearchParams({ page: page - 1 })}
             disabled={page === 1}
             className="
-            px-4 py-2 rounded border bg-emerald-500 text-white cursor-pointer
+            px-4 py-2 rounded border bg-emerald-500 hover:bg-emerald-600  text-white cursor-pointer
             disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Anterior
@@ -95,10 +100,12 @@ export default function Home() {
           </span>
 
           <button
-            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+            onClick={() =>
+              setSearchParams({ page: Math.min(page + 1, totalPages) })
+            }
             disabled={page === totalPages}
             className="
-                px-4 py-2 rounded bg-emerald-500 text-white cursor-pointer
+                px-4 py-2 rounded bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer
                 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Próxima

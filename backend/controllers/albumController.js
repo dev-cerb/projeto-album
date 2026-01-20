@@ -156,3 +156,31 @@ export async function deleteAlbum(req, res) {
     return res.status(500).json({ message: "Erro ao excluir álbum." });
   }
 }
+
+export async function getAlbum(req, res) {
+  const { id } = req.params;
+  const userId = req.userId;
+
+  try {
+    const album = await prisma.album.findFirst({
+      where: {
+        id: Number(id),
+        userId,
+      },
+      select: {
+        id: true,
+        titulo: true,
+        descricao: true,
+      },
+    });
+
+    if (!album) {
+      return res.status(404).json({ message: "Álbum não encontrado." });
+    }
+
+    return res.json(album);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao o álbum." });
+  }
+}
